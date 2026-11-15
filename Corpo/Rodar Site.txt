@@ -1,0 +1,21 @@
+Abrir o terminal nesta pasta e executar:
+ python main.py
+
+O aplicativo atende nas portas 4000. Acesse:
+ http://localhost:4000/homepage
+
+No primeiro uso, o banco usuarios.sqlite3 é criado automaticamente.
+Credenciais de teste:
+ usuário: usuario
+ senha: 1234
+
+ usuário: admin
+ senha: 4321
+
+Funcionou?:
+     |- homepage
+	 |
+	 |- Login
+         |---homepage
+	 |- Catalogo
+         |---Produto

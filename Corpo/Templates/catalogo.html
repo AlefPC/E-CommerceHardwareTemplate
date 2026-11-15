@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/catalogo.css') }}">
+    <title>Catálogo</title>
+</head>
+<body>
+    <div class="header">
+        <a class="siteicon" href="{{ homepage_url }}">E-Commerce Hardware</a>
+        <a class="headlink" href="{{ homepage_url }}">Home</a>
+        <a class="headlink" href="{{ catalogo_url }}">Catálogo</a>
+        {% if session.get('username') %}
+        <span>Olá, {{ session['username'] }}.</span>
+        <a class="headlink" href="{{ url_for('carrinho') }}">Carrinho</a>
+        <a class="headlink" href="{{ url_for('logout') }}">Sair</a>
+        {% else %}
+        <a class="headlink" href="{{ login_url }}">Login</a>
+        {% endif %}
+    </div>
+
+    <div class="catalogo-title">
+        <h1>Catálogo</h1>
+        <p>Bem-vindo ao nosso catálogo!</p>
+    </div>
+    
+    <div class="catalogo-grid">
+        {% for product in produtos %}
+        <a class="catalogo-card" href="{{ url_for('produto_detalhe', product_id=product.id) }}">
+            <img
+                class="catalogo-image"
+                src="{{ url_for('product_image', filename=product.imagem) }}"
+                alt="{{ product.nome }}"
+            >
+            <span class="catalogo-name">{{ product.nome }}</span>
+            <span class="catalogo-description">{{ product.descricao }}</span>
+            <span class="catalogo-price">{{ product.preco }}</span>
+                {% if product.frete == "R$ 0,00" %}
+                <span class="catalogo-shipping"> <s> Frete: {{ product.frete }} </s> </span>
+                {% else %}
+                <span class="catalogo-shipping"> Frete: {{ product.frete }}</span>
+                {% endif %}
+        </a>
+        {% endfor %}
+    </div>
+</body>
+</html>

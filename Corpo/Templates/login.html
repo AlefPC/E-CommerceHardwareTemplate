@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <title>Login</title>
+</head>
+<body>
+    
+    <div class="header">
+        <a class="siteicon" href="{{ homepage_url }}">E-Commerce Hardware</a>
+        <a class="headlink" href="{{ homepage_url }}">Home</a>
+        <a class="headlink" href="{{ catalogo_url }}">Catálogo</a>
+        {% if session.get('username') %}
+        <span>Olá, {{ session['username'] }}.</span>
+        <a class="headlink" href="{{ url_for('carrinho') }}">Carrinho</a>
+        <a class="headlink" href="{{ url_for('logout') }}">Sair</a>
+        {% else %}
+        <a class="headlink" href="{{ login_url }}">Login</a>
+        {% endif %}
+    </div>
+
+    
+    <div class="login-title">
+        <h1>Iniciar sessão</h1>
+    </div>
+
+    <form method="post" action="{{ url_for('login') }}">
+        {% if error %}
+        <p class="error" role="alert">{{ error }}</p>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="usuario">Usuário<br></label>
+            <input type="text" id="usuario" name="usuario" placeholder="Digite seu nome de usuário" autocomplete="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="senha">Senha<br></label>
+            <input type="password" id="senha" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+</body>
+</html>

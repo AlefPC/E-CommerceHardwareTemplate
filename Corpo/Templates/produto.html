@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/produto.css') }}">
+    <title>{{ product.nome }}</title>
+</head>
+<body>
+    <div class="header">
+        <a class="siteicon" href="{{ homepage_url }}">E-Commerce Hardware</a>
+        <a class="headlink" href="{{ homepage_url }}">Home</a>
+        <a class="headlink" href="{{ catalogo_url }}">Catálogo</a>
+
+        {% if session.get('username') %}
+        <span>Olá, {{ session['username'] }}.</span>
+        <a class="headlink" href="{{ url_for('carrinho') }}">Carrinho</a>
+        <a class="headlink" href="{{ url_for('logout') }}">Sair</a>
+        {% else %}
+        <a class="headlink" href="{{ login_url }}">Login</a>
+        {% endif %}
+
+    </div>
+
+    <main class="product-view">
+        <div class="product-media">
+            <img
+                class="product-image"
+                src="{{ url_for('product_image', filename=product.imagem) }}"
+                alt="{{ product.nome }}"
+            >
+        </div>
+        <section class="product-info" aria-labelledby="product-name">
+            <h1 id="product-name">{{ product.nome }}</h1>
+            <p>{{ product.descricao }}</p>
+            <p class="product-price">{{ product.preco }}</p>
+
+                {% if product.frete == "R$ 0,00" %}
+                <span class="offer-price"> <s> Frete: {{ product.frete }} </s> <br></span>
+                {% else %}
+                <span class="offer-price"> Frete: {{ product.frete }} <br></span>
+                {% endif %}
+
+            {% if session.get('username') %}
+            <form method="post" action="{{ url_for('adicionar_ao_carrinho', product_id=product.id) }}">
+                <button class="template-cart" type="submit">Adicionar ao Carrinho</button>
+            </form>
+            {% else %}
+            <a class="template-cart" href="{{ login_url }}">Entre para adicionar ao carrinho</a>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

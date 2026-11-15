@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/carrinho.css') }}">
+    <title>Carrinho</title>
+</head>
+<body>
+    <header class="header">
+        <a class="siteicon" href="{{ homepage_url }}">E-Commerce Hardware</a>
+        <a class="headlink" href="{{ homepage_url }}">Home</a>
+        <a class="headlink" href="{{ url_for('catalogo') }}">Catálogo</a>
+        <span>Olá, {{ session['username'] }}.</span>
+        <a class="headlink" href="{{ url_for('carrinho') }}">Carrinho</a>
+        <a class="headlink" href="{{ url_for('logout') }}">Sair</a>
+    </header>
+
+    {% for category, message in messages %}
+    <div class="message-overlay" role="{{ 'status' if category == 'success' else 'alert' }}">
+        <div class="message-card {{ category }}">
+            <p>{{ message }}</p>
+            <a href="{{ url_for('carrinho') }}">Continuar</a>
+        </div>
+    </div>
+    {% endfor %}
+
+    <main class="cart-page">
+        <h1>Seu carrinho</h1>
+        {% if items %}
+        <div class="cart-layout">
+            <section class="cart-items" aria-label="Produtos no carrinho">
+                {% for item in items %}
+                <article class="cart-item">
+                    <img
+                        src="{{ url_for('product_image', filename=item.product.imagem) }}"
+                        alt="{{ item.product.nome }}"
+                    >
+                    <div class="item-info">
+                        <h2>{{ item.product.nome }}</h2>
+                        <p>Quantidade: {{ item.quantity }}</p>
+                        <p>Preço unitário: {{ item.unit_price_display }}</p>
+                        <p>Frete unitário: {{ item.shipping_display }}</p>
+                    </div>
+                    <strong class="item-total">{{ item.total_display }}</strong>
+                    <form method="post" action="{{ url_for('remover_do_carrinho', product_id=item.product.id) }}">
+                        <button class="remove-button" type="submit">Remover</button>
+                    </form>
+                </article>
+                {% endfor %}
+            </section>
+
+            <aside class="cart-summary">
+                <h2>Resumo da compra</h2>
+                <p><span>Produtos</span><strong>{{ subtotal }}</strong></p>
+                <p><span>Frete</span><strong>{{ shipping_total }}</strong></p>
+                <p class="grand-total"><span>Total a pagar</span><strong>{{ total }}</strong></p>
+                <form method="post" action="{{ url_for('carrinho') }}">
+                    <button class="checkout-button" type="submit">Confirmar Compra</button>
+                </form>
+            </aside>
+        </div>
+        {% else %}
+        <section class="empty-cart">
+            <p>Seu carrinho está vazio.</p>
+            <a class="continue-shopping" href="{{ url_for('catalogo') }}">Ver catálogo</a>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>

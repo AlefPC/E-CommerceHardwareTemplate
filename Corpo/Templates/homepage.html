@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+    <title>E-Commerce Hardware</title>
+</head>
+<body>
+    <div class="header">
+        <a class="siteicon" href="{{ homepage_url }}">E-Commerce Hardware</a>
+        <a class="headlink" href="{{ homepage_url }}">Home</a>
+        <a class="headlink" href="{{ catalogo_url }}">Catálogo</a>
+        {% if session.get('username') %}
+        <span>Olá, {{ session['username'] }}.</span>
+        <a class="headlink" href="{{ url_for('carrinho') }}">Carrinho</a>
+        <a class="headlink" href="{{ url_for('logout') }}">Sair</a>
+        {% else %}
+        <a class="headlink" href="{{ login_url }}">Login</a>
+        {% endif %}
+    </div>
+
+    <div class="titulo">
+        <h1>E-Commerce Hardware Projeto de Reuso</h1>
+        <p>Explore nosso catálogo de produtos e aproveite as ofertas disponíveis!</p>
+    </div>
+    <div class="hp_catalogo"><a class="catalogo_b" href="{{ catalogo_url }}">Acessar Catálogo</a></div>
+    
+    <div class="home-content">
+        <div class="ofertas-grid">
+            <h2>Ofertas disponíveis</h2>
+                <div class="ofertas-container">
+                    {% for product in ofertas %}
+                    <a class="offer-card" href="{{ url_for('produto_detalhe', product_id=product.id) }}">
+                        <img
+                            class="offer-image"
+                            src="{{ url_for('product_image', filename=product.imagem) }}"
+                            alt="{{ product.nome }}"
+                        >
+                        <span class="offer-name">{{ product.nome }}</span>
+
+                        {% if product.frete == "0,00" %}
+                        <span class="offer-price" > {{ product.preco }} + Frete: <s> {{ product.frete }} </s> </span>
+                        {% endif %}
+
+                        {% if product.frete > "0,00" %}
+                        <span class="offer-price">{{ product.preco }} + Frete: {{ product.frete }}</span>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+                </div>
+        </div>
+
+        <div class="apresentacao">
+            <h2>Site feito com Flask</h2>
+            <p>A E-Commerce Hardware é uma plataforma de e-commerce feita com o Framework Flask.
+                Utilizando SQLite como banco de dados, o site realiza comunicação direta entre back-end e front-end.
+                Permitindo manutenção constante e ágil em projetos de desenvolvimento web.</p>
+        </div>
+    </div>
+</body>
+</html>
